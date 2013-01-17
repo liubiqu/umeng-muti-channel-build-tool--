@@ -9,6 +9,7 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Windows.Forms;
 
 namespace UmengChannel
 {
@@ -23,12 +24,12 @@ namespace UmengChannel
 
         static Log()
         {
-            if (!Directory.Exists(Path.Combine(System.Environment.CurrentDirectory, "log")))
+            if (!Directory.Exists(Path.Combine(Application.StartupPath, "log")))
             {
-                Directory.CreateDirectory(Path.Combine(System.Environment.CurrentDirectory, "log"));
+                Directory.CreateDirectory(Path.Combine(Application.StartupPath, "log"));
             }
 
-            ii = Path.Combine(System.Environment.CurrentDirectory,
+            ii = Path.Combine(Application.StartupPath,
                 Path.Combine("log", string.Format("{0}.txt", DateTime.Now.ToString("yyyy-MM-dd_hh_mm"))));
 
             if (File.Exists(ii) && (new FileInfo(ii).Length > 1024 * 1024))

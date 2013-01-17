@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Windows.Forms;
 
 namespace UmengChannel
 {
@@ -40,8 +41,8 @@ namespace UmengChannel
 
             }
 
-            ant_home = Path.Combine(System.Environment.CurrentDirectory, Path.Combine("tools", "ant"));
-            apktool_home = Path.Combine(System.Environment.CurrentDirectory, Path.Combine("tools", "apktool"));
+            ant_home = Path.Combine(Application.StartupPath, Path.Combine("tools", "ant"));
+            apktool_home = Path.Combine(Application.StartupPath, Path.Combine("tools", "apktool"));
             buildDirectory();
 
             loadSysConfig();
@@ -50,7 +51,7 @@ namespace UmengChannel
 
         private void buildDirectory()
         {
-            string pro_path = Path.Combine(System.Environment.CurrentDirectory, "projects");
+            string pro_path = Path.Combine(Application.StartupPath, "projects");
 
             if (!Directory.Exists(pro_path))
             {
@@ -236,7 +237,7 @@ namespace UmengChannel
             }
 
             string project_name = projects.Keys[index];
-            string setting_project_path = Path.Combine(System.Environment.CurrentDirectory,
+            string setting_project_path = Path.Combine(Application.StartupPath,
                 Path.Combine("projects", Utils.generateSettingFileName(project_name)));
 
 
@@ -362,7 +363,7 @@ namespace UmengChannel
         {
             get
             {
-                return Path.Combine(System.Environment.CurrentDirectory, "temp");
+                return Path.Combine(Application.StartupPath, "temp");
             }
         }
 
@@ -370,7 +371,7 @@ namespace UmengChannel
         {
             get
             {
-                return Path.Combine(System.Environment.CurrentDirectory, "bin");
+                return Path.Combine(Application.StartupPath, "bin");
             }
         }
 
@@ -394,7 +395,7 @@ namespace UmengChannel
         {
             get
             {
-                return Path.Combine(System.Environment.CurrentDirectory, Path.Combine("output", ProjectName));
+                return Path.Combine(Application.StartupPath, Path.Combine("output", ProjectName));
             }
         }
         public Boolean isApkProject = false;
@@ -439,7 +440,7 @@ namespace UmengChannel
         public void writeSettintToFile(string projectName)
         {
             string project_path = System.IO.Path.Combine(Configration.projects_path, Utils.generateSettingFileName(projectName));
-
+            project_path = Path.Combine(Application.StartupPath, project_path);
             if (File.Exists(project_path)) File.Delete(project_path);
 
             using (Stream file = File.Open(project_path, FileMode.OpenOrCreate))
@@ -447,7 +448,7 @@ namespace UmengChannel
                 IFormatter formatter = new BinaryFormatter();
                 formatter.Serialize(file, this);
 
-                Log.i("setting save succeed !!");
+                Log.i("设置保存成功！");
             }
 
         }

@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
+using System.Windows.Forms;
 using System.Xml;
 
 namespace UmengChannel
@@ -513,7 +514,7 @@ namespace UmengChannel
             string project_name = project.ProjectName;
             string file_name = string.Format("{0}_{1}.apk", project.isApkProject ? project_name.Replace(".apk", "") : project_name, channel);
 
-            string dst_path = Path.Combine(System.Environment.CurrentDirectory,
+            string dst_path = Path.Combine(Application.StartupPath,
                 Path.Combine("output", project_name));
 
             if (!Directory.Exists(dst_path))
@@ -561,7 +562,7 @@ namespace UmengChannel
             p.OutputDataReceived += new DataReceivedEventHandler(p_OutputDataReceived);
             p.ErrorDataReceived += new DataReceivedEventHandler(p_ErrorDataReceived);
 
-            p.StartInfo.WorkingDirectory = System.Environment.CurrentDirectory;
+            p.StartInfo.WorkingDirectory = Application.StartupPath;
             //设定程序名
 
             p.StartInfo.FileName = "cmd.exe";
