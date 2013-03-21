@@ -59,28 +59,28 @@ namespace UmengChannel
             }
         }
 
-        public void setEnvironment()
+        public void setEnvironment(bool isSetEnvironment)
         {
             if (hasSetEnvironment)
             {
                 return;
             }
             Log.i("set environment");
-
-            string pathOrg = System.Environment.GetEnvironmentVariable("PATH", EnvironmentVariableTarget.Process);
-
-            System.Environment.SetEnvironmentVariable("JAVA_HOME", java_home);//, EnvironmentVariableTarget.User);
-            System.Environment.SetEnvironmentVariable("ANT_HOME", ant_home);//, EnvironmentVariableTarget.User);
-
-
             List<String> path = new List<string>();
+            if (isSetEnvironment)
+            {
+                string pathOrg = System.Environment.GetEnvironmentVariable("PATH", EnvironmentVariableTarget.Process);
 
-            path.Add(pathOrg);
-            path.Add(Path.Combine("%JAVA_HOME%", "bin"));
-            path.Add(Path.Combine("%JAVA_HOME%", "lib"));
-            path.Add(Path.Combine("%ANT_HOME%", "bin"));
-            path.Add("%JAVA_HOME%");
-            path.Add("%ANT_HOME%");
+                System.Environment.SetEnvironmentVariable("JAVA_HOME", java_home);//, EnvironmentVariableTarget.User);
+                System.Environment.SetEnvironmentVariable("ANT_HOME", ant_home);//, EnvironmentVariableTarget.User);
+                path.Add(pathOrg);
+                path.Add(Path.Combine("%JAVA_HOME%", "bin"));
+                path.Add(Path.Combine("%JAVA_HOME%", "lib"));
+                path.Add(Path.Combine("%ANT_HOME%", "bin"));
+                path.Add("%JAVA_HOME%");
+                path.Add("%ANT_HOME%");
+            }
+
             path.Add(Path.Combine(java_home, "bin"));
             path.Add(Path.Combine(ant_home, "bin"));
             path.Add(Path.Combine(android_home, "tools"));
@@ -93,9 +93,7 @@ namespace UmengChannel
                 paths.Append(p);
                 paths.Append(";");
             }
-
             System.Environment.SetEnvironmentVariable("PATH", paths.ToString());
-
             hasSetEnvironment = true;
         }
 
@@ -122,7 +120,7 @@ namespace UmengChannel
 
             if (!string.IsNullOrEmpty(java_home) && !string.IsNullOrEmpty(android_home))
             {
-                setEnvironment();
+                setEnvironment(false);
             }
         }
 
@@ -397,7 +395,12 @@ namespace UmengChannel
         {
             get
             {
-                return Path.Combine(Application.StartupPath, Path.Combine("output", ProjectName));
+                string strOutputPath = Path.Combine(Application.StartupPath, Path.Combine("output", ProjectName));
+                if (!Directory.Exists(strOutputPath))
+                {
+                    Directory.CreateDirectory(strOutputPath);
+                }
+                return strOutputPath;
             }
         }
         public Boolean isApkProject = false;

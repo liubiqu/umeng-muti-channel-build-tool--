@@ -39,7 +39,7 @@ namespace UmengChannel
 
         public static bool isValidAndroidSDKPath(string path)
         {
-            string[] folders = { "tools", "platforms" };
+            string[] folders = { "tools", "platform-tools" };
             string folder_path;
 
             foreach (string folder in folders)

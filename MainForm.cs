@@ -192,7 +192,8 @@ namespace UmengChannel
         //open the apks folder
         void Button2Click(object sender, EventArgs e)
         {
-            System.Diagnostics.Process.Start("explorer.exe", project.outputFolder);
+            // System.Diagnostics.Process.Start("explorer.exe", project.outputFolder);
+            System.Diagnostics.Process.Start(project.outputFolder);
         }
 
         //open keystore file
@@ -223,7 +224,7 @@ namespace UmengChannel
                 }
                 else
                 {
-                    MessageBox.Show("请选择 JDK 工程根目录( 包涵 lin ,bin 等子目录)");
+                    MessageBox.Show("请选择 JDK 工程根目录(包含lib ,bin 等子目录)");
                 }
             }
         }
@@ -241,7 +242,7 @@ namespace UmengChannel
                 }
                 else
                 {
-                    MessageBox.Show("请选择 Android SDK 目录( 包涵 platform , tools 等子目录)");
+                    MessageBox.Show("请选择 Android SDK 目录(包含platform-tools , tools 等子目录)");
                 }
             }
         }
@@ -291,9 +292,7 @@ namespace UmengChannel
             {
                 Log.e("Please set the project path");
                 error = "工程目录没有设置";
-
             }
-
             if (project.isApkProject)
             {
                 if (!File.Exists(project.project_path))
@@ -312,7 +311,6 @@ namespace UmengChannel
                 {
                     Log.e("The input project path does't exit");
                     error = "工程目录不存在";
-
                 }
                 else
                 {
@@ -324,13 +322,11 @@ namespace UmengChannel
             {
                 Log.e("Please set the keystore file path");
                 error = "密钥文件没设置";
-
             }
             if (!File.Exists(project.keystore_file_path))
             {
                 Log.e("The input keystore file doesn't exit");
                 error = "密钥文件不存在";
-
             }
             else
             {
@@ -341,51 +337,43 @@ namespace UmengChannel
             {
                 error = "密钥库密码没设置";
                 Log.e("The input keystore password is null");
-
             }
 
             if (project.key_pw == null)
             {
                 error = "密钥密码没设置";
                 Log.e("The input key password is null");
-
             }
 
             if (project.alias == null)
             {
                 error = "密钥别名没有设置";
                 Log.e("The input alias is null");
-
             }
 
             if (project.channels == null || project.channels.Count <= 0)
             {
                 error = "渠道没有设置";
                 Log.w("Please input channels !");
-
             }
-
-
             if (string.IsNullOrEmpty(Configration.Instanse().java_home))
             {
                 error = "JDK 路径没有设置";
             }
-
-            if (string.IsNullOrEmpty(Configration.Instanse().android_home))
+            if (!project.isApkProject) //只是源代码编译的时候需要设置
             {
-                error = "Android SDK 路径没有设置";
+                if (string.IsNullOrEmpty(Configration.Instanse().android_home))
+                {
+                    error = "源代码编译模式需要设置Android SDK 路径";
+                }
             }
-
             if (error != null)
             {
                 MessageBox.Show(error);
                 return false;
             }
+            Configration.Instanse().setEnvironment(!project.isApkProject);
 
-            Configration.Instanse().setEnvironment();
-
-            //if(android_sdk_path == null)
-            //if(java sdk path !
             return true;
         }
         #endregion
