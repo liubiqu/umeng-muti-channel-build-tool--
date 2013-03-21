@@ -28,7 +28,7 @@ namespace UmengChannel
 
         private bool hasSetEnvironment = false;
 
-        private string currentProject;
+        private string currentProject = "";
         public SortedList<string, ProjectConfigration> projects { get; set; }
 
         private static Configration configration;
@@ -195,7 +195,9 @@ namespace UmengChannel
 
         public ProjectConfigration getCurrentProjectConfig()
         {
-            int index = projects.IndexOfKey(currentProject);
+            int index = 0;
+            if (currentProject != "")
+                index = projects.IndexOfKey(currentProject);
             return projects.Values[index] as ProjectConfigration;
         }
 

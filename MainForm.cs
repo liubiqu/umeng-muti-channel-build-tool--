@@ -29,9 +29,7 @@ namespace UmengChannel
         public MainForm()
         {
             Application.ApplicationExit += new EventHandler(this.Application_ApplicationExit);
-            //
-            // The InitializeComponent() call is required for Windows Forms designer support.
-            //
+
             InitializeComponent();
 
             refreshProjects();
@@ -46,6 +44,8 @@ namespace UmengChannel
             //agent.StartNewSession("50596b7c52701557f6000157", "official");
 
         }
+        #region 后台线程处理
+
         //set backgroundworker for background task!
         private void initBackgroundWorker()
         {
@@ -54,6 +54,20 @@ namespace UmengChannel
             bw.DoWork += new DoWorkEventHandler(doWork);
             bw.ProgressChanged += new ProgressChangedEventHandler(bw_ProgressChanged);
             bw.RunWorkerCompleted += new RunWorkerCompletedEventHandler(bw_RunWorkerCompleted);
+        }
+
+        private void doWork(object sender, DoWorkEventArgs e)
+        {
+            try
+            {
+                BackgroundWorker worker = sender as BackgroundWorker;
+                Worker.setProject(project, worker);
+                Worker.start();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         private void bw_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -73,14 +87,11 @@ namespace UmengChannel
                 sb.Append("\n\n");
                 sb.Append("查看 /log/i.txt 详细错误信息");
                 MessageBox.Show(sb.ToString());
-
                 //agent.OnEvent("build", "fail");
             }
-
             else
             {
                 MessageBox.Show("渠道打包完成");
-
                 //agent.OnEvent("build", "success");
             }
         }
@@ -90,7 +101,7 @@ namespace UmengChannel
             this.progressBar1.Value = e.ProgressPercentage;
             Log.i("progress:" + e.ProgressPercentage);
         }
-
+        #endregion
         //
         private void bindGeneralConfig()
         {
@@ -99,6 +110,7 @@ namespace UmengChannel
             this.tb_android_sdk_path.DataBindings.Clear();
             this.tb_android_sdk_path.DataBindings.Add("Text", Configration.Instanse(), "android_home", false, DataSourceUpdateMode.OnPropertyChanged);
         }
+
         //projects -> view
         private void refreshProjects()
         {
@@ -118,10 +130,10 @@ namespace UmengChannel
 
             this.projects.EndUpdate();
         }
+
         //project -> view
         private void bindProjectConfig()
         {
-
             //if(this)
             this.tb_project.DataBindings.Clear();
             this.tb_project.DataBindings.Add("Text", project, "project_path", false, DataSourceUpdateMode.OnPropertyChanged);
@@ -150,7 +162,6 @@ namespace UmengChannel
             config.keystore_pw = this.tb_keystore_pw.Text;
             config.key_pw = this.tb_key_pw.Text;
             config.alias = this.tb_alias.Text;
-
         }
 
         private void addChannel(string channel)
@@ -174,25 +185,6 @@ namespace UmengChannel
             }
         }
 
-
-
-        private void doWork(object sender, DoWorkEventArgs e)
-        {
-            try
-            {
-                BackgroundWorker worker = sender as BackgroundWorker;
-                Worker.setProject(project, worker);
-                Worker.start();
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-
-
-
         //open the apks folder
         void Button2Click(object sender, EventArgs e)
         {
@@ -211,7 +203,6 @@ namespace UmengChannel
             {
                 this.tb_keystore.Text = openFileDialog1.FileName;
             }
-
         }
 
         //open java sdk path
@@ -274,7 +265,6 @@ namespace UmengChannel
             }
             refreshProjects();
             bindProjectConfig();
-
             //agent.OnEvent("build", "new_project");
         }
 
@@ -284,12 +274,12 @@ namespace UmengChannel
             {
                 Configration.Instanse().saveProjects();
                 Configration.Instanse().saveSysConfig();
-
                 //agent.EndSession();
             }
             catch { }
         }
 
+        #region 配置参数检测
         public bool isEnviromentReady(ProjectConfigration project)
         {
             string error = null;
@@ -394,8 +384,10 @@ namespace UmengChannel
             //if(java sdk path !
             return true;
         }
+        #endregion
 
-
+        #region 按钮事件绑定
+       
         void Bt_delete_projectClick(object sender, EventArgs e)
         {
             deleteProject(projects.SelectedIndex);
@@ -445,6 +437,29 @@ namespace UmengChannel
                 OnGenerateProject(openFileDialog1.FileName);
             }
         }
+
+        private void btnStart_Click(object sender, EventArgs e)
+        {
+            //loadConfig();
+            if (!isEnviromentReady(project))
+            {
+                return;
+            }
+            Configration.Instanse().saveCurrentProject(Configration.Instanse().getCurrentProjectConfig());
+
+            if (bw.IsBusy)
+            {
+                MessageBox.Show("正在打包，稍后再试");
+                return;
+            }
+            progressBar1.Visible = true;
+            btnStart.Enabled = true;
+            btnStart.Text = "正在打包...";
+            bw.RunWorkerAsync();
+
+            //agent.OnEvent("build", "start");
+        }
+        #endregion
 
         #region 频道管理相关
         /// <summary>
@@ -512,24 +527,5 @@ namespace UmengChannel
         }
         #endregion
 
-        private void btnStart_Click(object sender, EventArgs e)
-        {
-            //loadConfig();
-            if (!isEnviromentReady(project))
-            {
-                return;
-            }
-            if (bw.IsBusy)
-            {
-                MessageBox.Show("正在打包，稍后再试");
-                return;
-            }
-            progressBar1.Visible = true;
-            btnStart.Enabled = true;
-            btnStart.Text = "正在打包...";
-            bw.RunWorkerAsync();
-
-            //agent.OnEvent("build", "start");
-        }
     }
 }

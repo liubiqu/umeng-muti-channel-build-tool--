@@ -42,12 +42,10 @@ namespace UmengChannel
 
         public static void start()
         {
-            worker.run();
-
+            worker.run(); 
         }
         private void run()
-        {
-
+        { 
             if (project.isApkProject)
             {
                 doWorkFromApk();
@@ -527,9 +525,7 @@ namespace UmengChannel
 
         private string ToCommand(List<string> cmd)
         {
-
             StringBuilder msb = new StringBuilder();
-
             foreach (string p in cmd)
             {
                 msb.Append(p);
@@ -545,12 +541,10 @@ namespace UmengChannel
     /// </summary>
     public class Sys
     {
-
         public static void Run(string cmd)
         {
             new SyncCmd().run(cmd);
         }
-
     }
 
     public class SyncCmd
@@ -563,34 +557,26 @@ namespace UmengChannel
             p.ErrorDataReceived += new DataReceivedEventHandler(p_ErrorDataReceived);
 
             p.StartInfo.WorkingDirectory = Application.StartupPath;
-            //设定程序名
-
+            //设定程序名 
             p.StartInfo.FileName = "cmd.exe";
 
-            //关闭Shell的使用
-
+            //关闭Shell的使用 
             p.StartInfo.UseShellExecute = false;
 
-            //重定向标准输入
-
+            //重定向标准输入 
             p.StartInfo.RedirectStandardInput = true;
 
-            //重定向标准输出
-
+            //重定向标准输出 
             p.StartInfo.RedirectStandardOutput = true;
 
-            //重定向错误输出
-
+            //重定向错误输出 
             p.StartInfo.RedirectStandardError = true;
 
-            //设置不显示窗口
-
+            //设置不显示窗口 
             p.StartInfo.CreateNoWindow = true;
 
-            //上面几个属性的设置是比较关键的一步。
-
-            //既然都设置好了那就启动进程吧，
-
+            //上面几个属性的设置是比较关键的一步。 
+            //既然都设置好了那就启动进程吧， 
         }
 
         public void run(string cmd)

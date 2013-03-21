@@ -67,7 +67,6 @@ namespace UmengChannel
             this.bt_java_path = new System.Windows.Forms.Button();
             this.bt_delete_project = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
-            this.tb_android_sdk_path = new System.Windows.Forms.TextBox();
             this.bt_android_sdk_path = new System.Windows.Forms.Button();
             this.label_hint = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
@@ -77,6 +76,7 @@ namespace UmengChannel
             this.btnChannelAdd = new System.Windows.Forms.Button();
             this.nudChannelNum = new System.Windows.Forms.NumericUpDown();
             this.label10 = new System.Windows.Forms.Label();
+            this.tb_android_sdk_path = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.nudChannelNum)).BeginInit();
             this.SuspendLayout();
             // 
@@ -373,6 +373,7 @@ namespace UmengChannel
             this.tb_java_path.ReadOnly = true;
             this.tb_java_path.Size = new System.Drawing.Size(210, 23);
             this.tb_java_path.TabIndex = 8;
+            this.tb_java_path.Text = global::UmengChannel.Properties.Settings.Default.txtJDK_Path;
             this.toolTip1.SetToolTip(this.tb_java_path, "例如：C:\\Program Files\\Java\\jdk1.6.0_22");
             // 
             // bt_java_path
@@ -408,19 +409,6 @@ namespace UmengChannel
             this.label3.TabIndex = 28;
             this.label3.Text = "Android SDK 路径";
             this.label3.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            // 
-            // tb_android_sdk_path
-            // 
-            this.tb_android_sdk_path.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tb_android_sdk_path.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.tb_android_sdk_path.Location = new System.Drawing.Point(316, 409);
-            this.tb_android_sdk_path.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.tb_android_sdk_path.Name = "tb_android_sdk_path";
-            this.tb_android_sdk_path.ReadOnly = true;
-            this.tb_android_sdk_path.Size = new System.Drawing.Size(210, 23);
-            this.tb_android_sdk_path.TabIndex = 10;
-            this.toolTip1.SetToolTip(this.tb_android_sdk_path, "例如：D:\\Android-sdk-windows");
             // 
             // bt_android_sdk_path
             // 
@@ -525,6 +513,20 @@ namespace UmengChannel
             this.label10.Size = new System.Drawing.Size(32, 17);
             this.label10.TabIndex = 36;
             this.label10.Text = "数量";
+            // 
+            // tb_android_sdk_path
+            // 
+            this.tb_android_sdk_path.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tb_android_sdk_path.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.tb_android_sdk_path.Location = new System.Drawing.Point(316, 409);
+            this.tb_android_sdk_path.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.tb_android_sdk_path.Name = "tb_android_sdk_path";
+            this.tb_android_sdk_path.ReadOnly = true;
+            this.tb_android_sdk_path.Size = new System.Drawing.Size(210, 23);
+            this.tb_android_sdk_path.TabIndex = 10;
+            this.tb_android_sdk_path.Text = global::UmengChannel.Properties.Settings.Default.txtAndroid_SDK_Path;
+            this.toolTip1.SetToolTip(this.tb_android_sdk_path, "例如：D:\\Android-sdk-windows");
             // 
             // MainForm
             // 
