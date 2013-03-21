@@ -18,25 +18,32 @@ namespace UmengChannel
     /// </summary>
     public class Log
     {
-        private static readonly string ii = null;
-
         private static StreamWriter sw = null;
+        private static string _logFile = "";
 
         static Log()
         {
-            if (!Directory.Exists(Path.Combine(Application.StartupPath, "log")))
+            if (File.Exists(logFile) && (new FileInfo(logFile).Length > 1024 * 1024))
             {
-                Directory.CreateDirectory(Path.Combine(Application.StartupPath, "log"));
+                File.Delete(logFile);
             }
+            sw = File.AppendText(logFile);
+        }
 
-            ii = Path.Combine(Application.StartupPath,
-                Path.Combine("log", string.Format("{0}.txt", DateTime.Now.ToString("yyyy-MM-dd_hh_mm"))));
-
-            if (File.Exists(ii) && (new FileInfo(ii).Length > 1024 * 1024))
+        public static string logFile
+        {
+            get
             {
-                File.Delete(ii);
+                if (_logFile == "")
+                {
+                    if (!Directory.Exists(Path.Combine(Application.StartupPath, "log")))
+                    {
+                        Directory.CreateDirectory(Path.Combine(Application.StartupPath, "log"));
+                    }
+                    _logFile = Path.Combine(Application.StartupPath, Path.Combine("log", string.Format("{0}.txt", DateTime.Now.ToString("yyyy-MM-dd_hh_mm"))));
+                }
+                return _logFile;
             }
-            sw = File.AppendText(ii);
         }
 
         public static void d(int debug)

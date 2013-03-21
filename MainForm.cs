@@ -85,8 +85,12 @@ namespace UmengChannel
                 System.Text.StringBuilder sb = new System.Text.StringBuilder();
                 sb.Append(e.Error.Message);
                 sb.Append("\n\n");
-                sb.Append("查看 /log/i.txt 详细错误信息");
-                MessageBox.Show(sb.ToString());
+                sb.Append("是否立即查看详细错误信息");
+                if (MessageBox.Show(sb.ToString(), "错误提示", MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.Yes)
+                {
+                    System.Diagnostics.Process.Start(Log.logFile);
+                    //System.Diagnostics.Process.Start("explorer.exe", Log.logFile);
+                }
                 //agent.OnEvent("build", "fail");
             }
             else
@@ -387,7 +391,7 @@ namespace UmengChannel
         #endregion
 
         #region 按钮事件绑定
-       
+
         void Bt_delete_projectClick(object sender, EventArgs e)
         {
             deleteProject(projects.SelectedIndex);
